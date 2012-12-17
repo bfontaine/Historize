@@ -41,7 +41,7 @@
 
         strictEqual( $input.data( 'historize.index' ), null );
 
-        strictEqual( $input.historize( 'get' ), [] );
+        deepEqual( $input.historize( 'get' ), [] );
 
     });
 
