@@ -28,6 +28,8 @@
 
     _test( 'it should have an empty history at the beginning', function() {
 
+        $input.historize();
+
         notStrictEqual( $input.data( 'historize.id' ), undefined );
         strictEqual( $input.data( 'historize.index' ), null );
 
@@ -35,7 +37,7 @@
 
     _test( 'it should not extend the history on "Enter" if empty', function() {
 
-        $input.trigger( enter );
+        $input.historize().trigger( enter );
 
         strictEqual( $input.data( 'historize.index' ), null );
 
