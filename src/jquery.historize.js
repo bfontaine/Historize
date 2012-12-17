@@ -9,7 +9,7 @@
  * Repository: github.com/bfontaine/Historize
  *
  **/
-;(function( $ ) {
+;(function( $, undefined ) {
 
     // Default options
     var defaults = {
@@ -32,13 +32,15 @@
         // are passed: the event, and the options
         target: function() {
             
-            $( this ).trigger( 'enter' );
+            $( this ).trigger( 'enter' ).val( '' );
         
         }
 
     };
 
-    var // keep the histories of each input
+    var /* keep the histories of each input
+           each history is reversed, i.e. the first string is
+           the older value for the input */
         histories = [],
 
         // count of histories
@@ -50,17 +52,69 @@
 
         var $this = $( this );
 
-        histories[ $this.data( 'historize.id' ) ].push( $this.val() );
-        
-        ( options.target || $.noop ).call( this, ev, options );
+        if ( $this.val !== '' ) {
+
+            histories[ $this.data( 'historize.id' ) ].push( $this.val() );
+
+            $this.data( 'historize.index', null );
+
+        }
+
+        return ( options.target || $.noop ).call( this, ev, options );
 
     }
 
     // called with the input as 'this' when the 'historyUp' key is pressed
-    function goHistoryUp( ev, options ) {/* TODO */}
+    function goHistoryUp( ev, options ) {
+
+        var $this   = $( this ),
+            id      = $this.data( 'historize.id' ),
+            index   = $this.data( 'historize.index' ),
+            history = histories[ id ];
+
+        if (   id !== undefined
+            && history.length !== 0
+            && index !== 0
+           ) {
+            
+            if ( index === null ) {
+                index = history.length;
+            }
+
+            $this.data( 'historize.index', index - 1 );
+            $this.val( history[ index - 1 ] );
+
+        }
+
+        return false;
+
+    }
 
     // called with the input as 'this' when the 'historyDown' key is pressed
-    function goHistoryDown( ev, options ) {/* TODO */}
+    function goHistoryDown( ev, options ) {
+
+        var $this   = $( this ),
+            id      = $this.data( 'historize.id' ),
+            index   = $this.data( 'historize.index' ),
+            history = histories[ id ];
+
+        if (   id !== undefined
+            && history.length !== 0
+            && index < history.length
+           ) {
+
+            $this.data( 'historize.index', index + 1 );
+            $this.val( history[ index + 1 ] );
+
+        } else if ( index == history.length ) {
+
+            $this.val( '' );
+
+        }
+
+        return false;
+
+    }
 
     // called with the input as 'this' when the autocomplete key is pressed
     function autocomplete( ev, options ) {/* TODO */}
@@ -71,7 +125,15 @@
 
         var options;
         
-        if ( typeof opts === 'object' ) {
+        // return the history of the first element
+        // of the current selected inputs set
+        if ( opts === 'get' ) {
+
+            return histories[ this.first().data( 'historize.id' ) ];
+
+        }
+
+        if ( $.type( opts ) === 'object' ) {
 
             options = $.extend( true, {}, defaults, opts );
 
@@ -81,18 +143,20 @@
 
         }
 
-        // Set the history's id of each element
+        // Set the history's id & index of each element
         this.each(function( i, e ) {
 
             var id = histories_count++;
 
             histories[id] = [];
 
-            $(e).data( 'historize.id', id );
+            $( e ).data( 'historize.id', id )
+                  .data( 'historize.index', null );
 
         });
         
-        this.bind( 'keypress', function( ev ) {
+        // 'keypress' is not triggered for arrows keys
+        this.bind( 'keydown', function( ev ) {
 
             var fn;
 
@@ -107,7 +171,7 @@
 
             }
 
-            fn.call( this, ev, options );
+            return fn.call( this, ev, options );
 
         });
 
