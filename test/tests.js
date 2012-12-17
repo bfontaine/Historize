@@ -1,10 +1,45 @@
 (function($) {
 
-    test( 'it should returns itself', function() {
+    var $input,
+        $body = $( 'body' ).first(),
 
-        var $input = $( 'input' );
+        enter = $.Event( 'keydown' );
+
+    enter.which = 13;
+
+
+    function _test( str, fn ) {
+
+        // setup
+        $input = $( '<input/>' ).appendTo($body);
+
+        test( str, fn );
+
+        // teardown
+        $input.remove();
+    }
+
+
+    _test( 'it should return itself', function() {
 
         equal( $input.historize(), $input );
+
+    });
+
+    _test( 'it should have an empty history at the beginning', function() {
+
+        notStrictEqual( $input.data( 'historize.id' ), undefined );
+        strictEqual( $input.data( 'historize.index' ), null );
+
+    });
+
+    _test( 'it should not extend the history on "Enter" if empty', function() {
+
+        $input.trigger( enter );
+
+        strictEqual( $input.data( 'historize.index' ), null );
+
+        strictEqual( $input.historize( 'get' ), [] );
 
     });
 
