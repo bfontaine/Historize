@@ -4,6 +4,8 @@ Historize
 Historize is a jQuery plugin which allows you to keep an history on an input and
 a tab-completion system, like in a shell.
 
+**[in development]**
+
 Usage
 -----
 
