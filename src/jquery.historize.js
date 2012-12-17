@@ -52,7 +52,7 @@
 
         var $this = $( this );
 
-        if ( $this.val !== '' ) {
+        if ( $this.val() !== '' ) {
 
             histories[ $this.data( 'historize.id' ) ].push( $this.val() );
 
