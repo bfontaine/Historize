@@ -72,7 +72,7 @@
 
     });
 
-    test( 'Pressing "Down" should do nothing at the beginning without value', function() {
+    test( 'Pressing "Down" with no value should do nothing at the beginning', function() {
 
         $input.historize().trigger( evs.down );
 
@@ -90,7 +90,7 @@
 
     });
 
-    test( 'Pressing "Up" should do nothing at the beginning without value', function() {
+    test( 'Pressing "Up" with no value should do nothing at the beginning', function() {
 
         $input.historize().trigger( evs.up );
 
@@ -105,6 +105,30 @@
 
         strictEqual( $input.data( 'historize.index' ), null );
         deepEqual( $input.historize( 'get' ), [] );
+
+    });
+
+    test( 'Pressing "Up" with no value should go back in the history', function() {
+
+        var val_1 = 'val_1',
+            val_2 = 'val_2';
+
+        $input.historize()
+                .val( val_1 ).trigger( evs.enter )
+                .val( val_2 ).trigger( evs.enter );
+
+
+        equal( $input.val(), '' );
+
+        deepEqual( $input.historize( 'get' ), [ val_1, val_2 ] );
+
+        equal( $input.data( 'historize.index' ), null );
+
+        equal( $input.trigger( evs.up ).val(), val_2 );
+        equal( $input.data( 'historize.index' ), 1 );
+        
+        equal( $input.trigger( evs.up ).val(), val_1 );
+        equal( $input.data( 'historize.index' ), 0 );
 
     });
 
