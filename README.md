@@ -10,7 +10,7 @@ Usage
 -----
 
 ```js
-$('#my-input').historise( options );
+$('#my-input').historize( options );
 ```
 
 `options` is an optional object, providing the following optional keys:
