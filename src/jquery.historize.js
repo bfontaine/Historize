@@ -77,12 +77,10 @@
             && index !== 0
            ) {
             
-            if ( index === null ) {
-                index = history.length;
-            }
+            index = ( index === null ? history.length : index ) - 1;
 
-            $this.data( 'historize.index', index - 1 );
-            $this.val( history[ index - 1 ] );
+            $this.data( 'historize.index', index );
+            $this.val( history[ index ] );
 
         }
 
@@ -100,11 +98,13 @@
 
         if (   id !== undefined
             && history.length !== 0
-            && index < history.length
+            && index < history.length - 1
            ) {
 
-            $this.data( 'historize.index', index + 1 );
-            $this.val( history[ index + 1 ] );
+            index++;
+
+            $this.data( 'historize.index', index );
+            $this.val( history[ index ] );
 
         } else if ( index == history.length ) {
 
