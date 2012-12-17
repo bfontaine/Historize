@@ -48,9 +48,13 @@
 
         $input.historize().val( 'foo' ).trigger( enter );
 
-        strictEqual( $input.data( 'historize.index' ), 0 );
-
+        strictEqual( $input.data( 'historize.index' ), null );
         deepEqual( $input.historize( 'get' ), [ 'foo' ] );
+
+        $input.val( 'bar' ).trigger( enter );
+
+        strictEqual( $input.data( 'historize.index' ), null );
+        deepEqual( $input.historize( 'get' ), [ 'foo', 'bar' ] );
 
     });
 
