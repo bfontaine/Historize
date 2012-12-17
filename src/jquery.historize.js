@@ -16,7 +16,7 @@
 
         // called with the input's text when the user press 'Tab'. A callback
         // may be given
-        completion: null,
+        complete: $.noop,
 
         // default keycodes
         keys: {
@@ -117,7 +117,11 @@
     }
 
     // called with the input as 'this' when the autocomplete key is pressed
-    function autocomplete( ev, options ) {/* TODO */}
+    function autocomplete( ev, options ) {
+
+        return ( options.complete || $.noop ).call( this, ev, options );
+        
+    }
 
 
     // Historize main function
