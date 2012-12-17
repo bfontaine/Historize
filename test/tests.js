@@ -7,26 +7,25 @@
 
     enter.which = 13;
 
+    module( 'main', {
 
-    function _test( str, fn ) {
+        setup:    function() {
+            $input = $( '<input/>' ).appendTo($body);
+        },
+        
+        teardown: function() {
+            $input.remove();
+        }
 
-        // setup
-        $input = $( '<input/>' ).appendTo($body);
+    });
 
-        test( str, fn );
-
-        // teardown
-        $input.remove();
-    }
-
-
-    _test( 'it should return itself', function() {
+    test( 'it should return itself', function() {
 
         equal( $input.historize(), $input );
 
     });
 
-    _test( 'it should have an empty history at the beginning', function() {
+    test( 'it should have an empty history at the beginning', function() {
 
         $input.historize();
 
@@ -35,7 +34,7 @@
 
     });
 
-    _test( 'it should not extend the history on "Enter" if empty', function() {
+    test( 'it should not extend the history on "Enter" if empty', function() {
 
         $input.historize().trigger( enter );
 
@@ -45,7 +44,7 @@
 
     });
 
-    _test( 'it should extend the history on "Enter" if not empty', function() {
+    test( 'it should extend the history on "Enter" if not empty', function() {
 
         $input.historize().val( 'foo' ).trigger( enter );
 
