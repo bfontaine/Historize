@@ -1,6 +1,6 @@
 (function($) {
 
-    test( 'it returns itself', function() {
+    test( 'it should returns itself', function() {
 
         var $input = $( 'input' );
 
