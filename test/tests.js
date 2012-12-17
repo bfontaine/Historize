@@ -45,4 +45,14 @@
 
     });
 
+    _test( 'it should extend the history on "Enter" if not empty', function() {
+
+        $input.historize().val( 'foo' ).trigger( enter );
+
+        strictEqual( $input.data( 'historize.index' ), 0 );
+
+        deepEqual( $input.historize( 'get' ), [ 'foo' ] );
+
+    });
+
 })(jQuery);
