@@ -24,7 +24,7 @@
 
     // -------
 
-    module( 'default options', {
+    module( 'default options, one input', {
 
         setup:    function() {
             $input = $( '<input/>' ).appendTo($body);
