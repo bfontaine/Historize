@@ -228,4 +228,34 @@
 
     });
 
+    test( 'Pressing "Up" then "Down" with a value should display back this value', function() {
+
+        var val_1 = 'val_1',
+            val_2 = 'val_2';
+
+        $input.historize()
+                .val( val_1 ).trigger( evs.enter )
+                .val( val_2 );
+
+
+        equal( $input.val(), val_2 );
+
+        deepEqual( $input.historize( 'get' ), [ val_1 ] );
+
+        equal( $input.data( 'historize.index' ), null );
+        
+        // Up
+        equal( $input.trigger( evs.up ).val(), val_1 );
+        equal( $input.data( 'historize.index' ), 0 );
+        
+        // Down
+        equal( $input.trigger( evs.down ).val(), val_2 );
+        equal( $input.data( 'historize.index' ), null );
+        
+        // Down
+        equal( $input.trigger( evs.down ).val(), val_2 );
+        equal( $input.data( 'historize.index' ), null );
+
+    });
+
 })(jQuery);
