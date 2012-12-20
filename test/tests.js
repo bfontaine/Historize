@@ -111,7 +111,11 @@
     test( 'Pressing "Up" with no value should go back in the history', function() {
 
         var val_1 = 'val_1',
-            val_2 = 'val_2';
+            val_2 = 'val_2',
+            up1   = evs.up,
+            up2   = $.extend( {}, up1 );
+
+        up2.which = up1.which;
 
         $input.historize()
                 .val( val_1 ).trigger( evs.enter )
@@ -124,10 +128,10 @@
 
         equal( $input.data( 'historize.index' ), null );
 
-        equal( $input.trigger( evs.up ).val(), val_2 );
+        equal( $input.trigger( up1 ).val(), val_2 );
         equal( $input.data( 'historize.index' ), 1 );
         
-        equal( $input.trigger( evs.up ).val(), val_1 );
+        equal( $input.trigger( up2 ).val(), val_1 );
         equal( $input.data( 'historize.index' ), 0 );
 
     });
