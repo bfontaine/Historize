@@ -131,10 +131,43 @@
     // called with the input as 'this' when the autocomplete key is pressed
     function autocomplete( ev, options ) {
 
-        if ( !options ) { return; }
-
-        return ( options.complete || $.noop ).call( this, ev, options );
+        if ( !options || !options.hasOwnProperty( 'complete' ) ) {
         
+            return;
+        
+        }
+
+        var compl  = options.complete,
+            $this  = $( this ),
+            strings, strings_len;
+
+        switch ( $.type( compl ) ) {
+
+            case 'function':
+                strings = compl.call( $this[0], ev, options ); break;
+
+            case 'array':
+                strings = compl.filter(function( e ) {
+
+                    return ( e.indexOf( $this.val() ) === 0 );
+
+                });
+                break;
+
+            default:
+                strings = [];
+        }
+
+        if (!( strings_len = strings.length )) { return; }
+
+        if ( strings_len === 1 ) {
+
+            return $this.val( strings[0] );
+
+        }
+        
+        //TODO display the possibilities
+
     }
 
 
@@ -182,20 +215,25 @@
         // 'keypress' is not triggered for arrows keys
         this.bind( 'keydown', function( ev ) {
 
-            var fn;
+            var fn = null;
 
             switch ( ev.which ) {
 
-                case options.keys.enter        : fn = validInput    ; break;
-                case options.keys.historyUp    : fn = goHistoryUp   ; break;
-                case options.keys.historyDown  : fn = goHistoryDown ; break;
-                case options.keys.autocomplete : fn = autocomplete  ; break;
+                case options.keys.enter       : fn = validInput    ; break;
+                case options.keys.historyUp   : fn = goHistoryUp   ; break;
+                case options.keys.historyDown : fn = goHistoryDown ; break;
+                case options.keys.tab         : fn = autocomplete  ; break;
 
-                default: fn = $.noop;
 
             }
 
-            return fn.call( this, ev, options );
+            if ( fn !== null ) {
+
+                ev.preventDefault();
+
+            }
+
+            return ( fn || $.noop ).call( this, ev, options );
 
         });
 
