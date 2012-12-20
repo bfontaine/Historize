@@ -70,16 +70,23 @@
         var $this   = $( this ),
             id      = $this.data( 'historize.id' ),
             index   = $this.data( 'historize.index' ),
-            history = histories[ id ];
+            history = histories[ id ],
+            h_len   = history.length;
 
-        if (   id !== undefined
-            && history.length !== 0
-            && index !== 0
-           ) {
+        if ( id !== undefined && h_len !== 0 && index !== 0 ) {
+
+            if ( index === null ) {
+
+                index = h_len;
+
+                $this.data( 'historize.val', $this.val() );
+
+            }
             
-            index = ( index === null ? history.length : index ) - 1;
+            index--;
 
             $this.data( 'historize.index', index );
+
             $this.val( history[ index ] );
 
         }
@@ -94,21 +101,26 @@
         var $this   = $( this ),
             id      = $this.data( 'historize.id' ),
             index   = $this.data( 'historize.index' ),
-            history = histories[ id ];
+            history = histories[ id ],
+            h_len   = history.length;
 
-        if (   id !== undefined
-            && history.length !== 0
-            && index < history.length - 1
-           ) {
+        if ( id !== undefined && h_len !== 0 && index < h_len - 1 ) {
 
             index++;
 
             $this.data( 'historize.index', index );
             $this.val( history[ index ] );
 
-        } else if ( index == history.length ) {
+        } else if ( index == h_len -1 ) {
 
-            $this.val( '' );
+            $this.val( $this.data( 'historize.val' ) );
+
+            $this.data({
+
+                'historize.val': null,
+                'historize.index': null
+
+            });
 
         }
 
@@ -118,6 +130,8 @@
 
     // called with the input as 'this' when the autocomplete key is pressed
     function autocomplete( ev, options ) {
+
+        if ( !options ) { return; }
 
         return ( options.complete || $.noop ).call( this, ev, options );
         
@@ -148,14 +162,20 @@
         }
 
         // Set the history's id & index of each element
+        // historize.val keep the actual value if the user
+        // go back in the history without validating it
         this.each(function( i, e ) {
 
             var id = histories_count++;
 
             histories[id] = [];
 
-            $( e ).data( 'historize.id', id )
-                  .data( 'historize.index', null );
+            $( e ).data({
+                
+                'historize.id': id,
+                'historize.index': null,
+                'historize.val': null 
+            });
 
         });
         
