@@ -1,0 +1,28 @@
+{
+    "name": "historize",
+    "version": "0.1.0",
+    "title": "Historize",
+    "author": {
+        "name": "Baptiste Fontaine",
+        "url": "http://bfontaine.net"
+    },
+    "description": "jQuery plugin to add tab-completion & history on an input, like in a shell.",
+    "bugs": "https://github.com/bfontaine/Historize/issues",
+    "homepage": "https://github.com/bfontaine/Historize",
+    "docs": "https://github.com/bfontaine/Historize",
+    "keywords": [
+      "input",
+      "shell",
+      "history",
+      "autocomplete"
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://raw.github.com/bfontaine/Historize/master/LICENCE"
+        }
+    ],
+    "dependencies": {
+        "jquery": ">=1.8.2"
+    }
+}
