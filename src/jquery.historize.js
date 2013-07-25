@@ -1,5 +1,5 @@
 /**!
- * Historize v0.0.1
+ * Historize v0.1.1
  *
  * Historize is a jQuery plugin which allows you to keep an history on an input and
  * a tab-completion system, like in a shell.
@@ -15,8 +15,12 @@
     var defaults = {
 
         // called with the input's text when the user press 'Tab'. A callback
-        // may be given
+        // may be given (not implemented yet)
         complete: $.noop,
+
+        // called when there are multiples possible
+        // completions
+        completionsDisplay: $.noop,
 
         // default keycodes
         keys: {
@@ -115,12 +119,7 @@
 
             $this.val( $this.data( 'historize.val' ) );
 
-            $this.data({
-
-                'historize.val': null,
-                'historize.index': null
-
-            });
+            $this.removeData([ 'historize.val', 'historize.index' ]);
 
         }
 
@@ -166,7 +165,11 @@
 
         }
         
-        //TODO display the possibilities
+        if ( $.isFunction( options.completionsDisplay ) ) {
+
+            options.completionsDisplay.call($this, strings);
+
+        }
 
     }
 
@@ -204,7 +207,6 @@
             histories[id] = [];
 
             $( e ).data({
-                
                 'historize.id': id,
                 'historize.index': null,
                 'historize.val': null 
@@ -213,7 +215,7 @@
         });
         
         // 'keypress' is not triggered for arrows keys
-        this.bind( 'keydown', function( ev ) {
+        this.on( 'keydown', function( ev ) {
 
             var fn = null;
 
